@@ -1,0 +1,23 @@
+#!/bin/env bash
+
+set -eo pipefail
+
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+main() {
+    local branch_name
+    branch_name=$(git rev-parse --abbrev-ref HEAD)
+    
+    if [[ -z $branch_name ]]; then
+        err "No branch name found"
+        exit 1
+    fi
+    
+    git add .
+    git commit -m "WIP: $branch_name [skip-ci]"
+    git push origin "$branch_name"
+}
+
+main "$@"
